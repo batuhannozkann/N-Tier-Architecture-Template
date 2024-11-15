@@ -7,6 +7,8 @@ namespace CV.Core.Entities
         public string FileName { get; set; }
         public string FileType { get; set; }
         public byte[] FileData { get; set; }
+        public Person Person { get; set; }
+        public int PersonId { get; set; }
     }
 
 }

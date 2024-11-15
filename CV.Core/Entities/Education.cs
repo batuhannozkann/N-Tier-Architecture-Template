@@ -10,6 +10,8 @@ namespace CV.Core.Entities
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public double? GPA { get; set; }
+        public Person Person { get; set; }
+        public int PersonId { get; set; }
     }
 
 }

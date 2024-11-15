@@ -15,6 +15,8 @@ namespace CV.Core.Entities
         public string? State { get; set; }
         public string? PostalCode { get; set; }
         public string? Country { get; set; }
+        public Person Person { get; set; }
+        public int PersonId { get; set; }
     }
 
 }

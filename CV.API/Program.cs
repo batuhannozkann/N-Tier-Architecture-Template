@@ -1,8 +1,12 @@
+using CV.Business.Registration;
+using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace CV.API
 {
     public class Program
     {
+        
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +17,7 @@ namespace CV.API
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
+            ServiceRegistration.ServiceRegistrationBusiness(builder.Services,builder.Configuration.GetConnectionString("SqlConnectionString"));
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

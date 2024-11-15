@@ -11,6 +11,8 @@ namespace CV.Core.Entities
         public List<string> TechnologiesUsed { get; set; }
         public ICollection<string> GitHubUrls { get; set; }
         public string ProjectURL { get; set; }
+        public Person Person { get; set; }
+        public int PersonId { get; set; }
     }
 
 }

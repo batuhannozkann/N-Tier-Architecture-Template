@@ -10,6 +10,8 @@ namespace CV.Core.Entities
         public DateTime? ExpirationDate { get; set; }
         public string? CredentialID { get; set; }
         public string? CredentialURL { get; set; }
+        public Person Person { get; set; }
+        public int PersonId { get; set; }
     }
 
 }
