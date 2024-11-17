@@ -1,4 +1,8 @@
-﻿using CV.DataAccess.Contexts;
+﻿using AutoMapper;
+using CV.Business.MapProfile;
+using CV.DataAccess.Contexts;
+using CV.DataAccess.Repositories.Abstract;
+using CV.DataAccess.Repositories.Concrete;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -16,6 +20,8 @@ namespace CV.Business.Registration
             {
                 x.UseSqlServer(connectionString);
             });
+            services.AddAutoMapper(typeof(MapProfile.MapProfile).Assembly);
+            services.AddScoped<IPersonRepository, PersonRepository>();
             return services;
         }
 
