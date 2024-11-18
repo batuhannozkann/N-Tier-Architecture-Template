@@ -9,7 +9,7 @@ namespace CV.DataAccess.Contexts
         {
 
         }
-        public DbSet<Project> Addresses { get; set; }
+        public DbSet<Address> Addresses { get; set; }
         public DbSet<Attachment> Attachments { get; set; }
         public DbSet<Certificate> Certificates { get; set; }
         public DbSet<Education> Educations { get; set; }

@@ -3,10 +3,13 @@ using CV.Business.Services.Abstract;
 using CV.Core.DTOs.Attachment;
 using CV.Core.Entities;
 using CV.DataAccess.Repositories.Abstract;
+using CV.DataAccess.Repositories.Concrete;
+using CV.Shared.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,78 +18,158 @@ namespace CV.Business.Services.Concrete
     public class AttachmentService : IAttachmentService
     {
         private readonly IAttachmentRepository _attachmentRepository;
+        private readonly IPersonRepository _personRepository;
         private readonly IMapper _mapper;
 
-        public AttachmentService(IAttachmentRepository attachmentRepository, IMapper mapper)
+        public AttachmentService(IAttachmentRepository attachmentRepository, IPersonRepository personRepository, IMapper mapper)
         {
             _attachmentRepository = attachmentRepository;
+            _personRepository = personRepository;
             _mapper = mapper;
         }
 
-        public async Task<AttachmentDto> AddAsync(CreateAttachmentDto model)
+        public async Task<ResponseDto<AttachmentDto>> AddAsync(CreateAttachmentDto model)
         {
             Attachment attachment = _mapper.Map<Attachment>(model);
+            attachment.Person = await _personRepository.GetByIdAsync(model.PersonId);
             var result = await _attachmentRepository.AddAsync(attachment);
-            return _mapper.Map<AttachmentDto>(result);
+            return new ResponseDto<AttachmentDto>
+            {
+                Data = _mapper.Map<AttachmentDto>(result),
+                StatusCode = (int)HttpStatusCode.Created,
+                Message = "Attachment successfully created",
+                IsSuccess = true
+            };
         }
 
-        public async Task<List<AttachmentDto>> AddRangeAsync(List<CreateAttachmentDto> model)
+        public async Task<ResponseDto<List<AttachmentDto>>> AddRangeAsync(List<CreateAttachmentDto> model)
         {
             List<Attachment> attachments = _mapper.Map<List<Attachment>>(model);
+            for (int i = 0; i < model.Count; i++)
+            {
+                attachments[i].Person = await _personRepository.GetByIdAsync(model[i].PersonId);
+            }
             var result = await _attachmentRepository.AddRangeAsync(attachments);
-            return _mapper.Map<List<AttachmentDto>>(result);
+            return new ResponseDto<List<AttachmentDto>>
+            {
+                Data = _mapper.Map<List<AttachmentDto>>(result),
+                StatusCode = (int)HttpStatusCode.Created,
+                Message = "Attachments successfully created",
+                IsSuccess = true
+            };
         }
 
-        public ICollection<AttachmentDto> GetAll()
+        public ResponseDto<ICollection<AttachmentDto>> GetAll()
         {
-            List<AttachmentDto> attachments = _mapper.Map<List<AttachmentDto>>(_attachmentRepository.GetAll().ToList());
-            return attachments;
+            var attachments = _mapper.Map<List<AttachmentDto>>(_attachmentRepository.GetAll().ToList());
+            return new ResponseDto<ICollection<AttachmentDto>>
+            {
+                Data = attachments,
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Attachments successfully retrieved",
+                IsSuccess = true
+            };
         }
 
-        public async Task<AttachmentDto> GetByIdAsync(long id)
+        public async Task<ResponseDto<AttachmentDto>> GetByIdAsync(long id)
         {
-            Attachment attachment = await _attachmentRepository.GetByIdAsync(id);
-            AttachmentDto attachmentDto = _mapper.Map<AttachmentDto>(attachment);
-            return attachmentDto;
+            var attachment = await _attachmentRepository.GetByIdAsync(id);
+            if (attachment == null)
+                return new ResponseDto<AttachmentDto>
+                {
+                    StatusCode = (int)HttpStatusCode.NotFound,
+                    Message = "Attachment not found",
+                    IsSuccess = false
+                };
+
+            return new ResponseDto<AttachmentDto>
+            {
+                Data = _mapper.Map<AttachmentDto>(attachment),
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Attachment successfully retrieved",
+                IsSuccess = true
+            };
         }
 
-        public async Task<AttachmentDto> GetSingleAsync(Expression<Func<Attachment, bool>> method)
+        public async Task<ResponseDto<AttachmentDto>> GetSingleAsync(Expression<Func<Attachment, bool>> method)
         {
-            Attachment attachment = await _attachmentRepository.GetSingleAsync(method);
-            AttachmentDto attachmentDto = _mapper.Map<AttachmentDto>(attachment);
-            return attachmentDto;
+            var attachment = await _attachmentRepository.GetSingleAsync(method);
+            if (attachment == null)
+                return new ResponseDto<AttachmentDto>
+                {
+                    StatusCode = (int)HttpStatusCode.NotFound,
+                    Message = "Attachment not found",
+                    IsSuccess = false
+                };
+
+            return new ResponseDto<AttachmentDto>
+            {
+                Data = _mapper.Map<AttachmentDto>(attachment),
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Attachment successfully retrieved",
+                IsSuccess = true
+            };
         }
 
-        public ICollection<AttachmentDto> GetWhere(Expression<Func<Attachment, bool>> method)
+        public ResponseDto<ICollection<AttachmentDto>> GetWhere(Expression<Func<Attachment, bool>> method)
         {
-            List<Attachment> attachments = _attachmentRepository.GetWhere(method).ToList();
-            List<AttachmentDto> attachmentDtos = _mapper.Map<List<AttachmentDto>>(attachments);
-            return attachmentDtos;
+            var attachments = _attachmentRepository.GetWhere(method).ToList();
+            return new ResponseDto<ICollection<AttachmentDto>>
+            {
+                Data = _mapper.Map<List<AttachmentDto>>(attachments),
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Attachments successfully retrieved",
+                IsSuccess = true
+            };
         }
 
-        public async Task Remove(long id)
+        public async Task<ResponseDtoWithoutData> Remove(long id)
         {
             await _attachmentRepository.Remove(id);
+            return new ResponseDtoWithoutData
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Attachment successfully deleted",
+                IsSuccess = true
+            };
         }
 
-        public void Remove(AttachmentDto model)
+        public ResponseDtoWithoutData Remove(AttachmentDto model)
         {
             _attachmentRepository.Remove(_mapper.Map<Attachment>(model));
+            return new ResponseDtoWithoutData
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Attachment successfully deleted",
+                IsSuccess = true
+            };
         }
 
-        public void RemoveRange(List<AttachmentDto> datas)
+        public ResponseDtoWithoutData RemoveRange(List<AttachmentDto> datas)
         {
             _attachmentRepository.RemoveRange(_mapper.Map<List<Attachment>>(datas));
+            return new ResponseDtoWithoutData
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Attachments successfully deleted",
+                IsSuccess = true
+            };
         }
 
-        public Task<int> SaveAsync()
+        public async Task<int> SaveAsync()
         {
-            throw new NotImplementedException();
+            return await _attachmentRepository.SaveAsync();
         }
 
-        public void Update(AttachmentDto model)
+        public async Task<ResponseDtoWithoutData> Update(AttachmentDto model)
         {
             _attachmentRepository.Update(_mapper.Map<Attachment>(model));
+            return new ResponseDtoWithoutData
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Attachment successfully updated",
+                IsSuccess = true
+            };
         }
     }
 }

@@ -17,10 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\CV.Business\CV.Business.csproj" />
     <ProjectReference Include="..\CV.Shared\CV.Shared.csproj" />
   </ItemGroup>

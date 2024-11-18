@@ -1,5 +1,6 @@
 ﻿using CV.Core.DTOs.Certificate;
 using CV.Core.Entities;
+using CV.Shared.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,16 +12,16 @@ namespace CV.Business.Services.Abstract
 {
     public interface ICertificateService
     {
-        Task<CertificateDto> AddAsync(CreateCertificateDto model);
-        Task<List<CertificateDto>> AddRangeAsync(List<CreateCertificateDto> model);
-        ICollection<CertificateDto> GetAll();
-        Task<CertificateDto> GetByIdAsync(long id);
-        Task<CertificateDto> GetSingleAsync(Expression<Func<Certificate, bool>> method);
-        ICollection<CertificateDto> GetWhere(Expression<Func<Certificate, bool>> method);
-        Task Remove(long id);
-        void Remove(CertificateDto model);
-        void RemoveRange(List<CertificateDto> datas);
+        Task<ResponseDto<CertificateDto>> AddAsync(CreateCertificateDto model);
+        Task<ResponseDto<List<CertificateDto>>> AddRangeAsync(List<CreateCertificateDto> model);
+        ResponseDto<ICollection<CertificateDto>> GetAll();
+        Task<ResponseDto<CertificateDto>> GetByIdAsync(long id);
+        Task<ResponseDto<CertificateDto>> GetSingleAsync(Expression<Func<Certificate, bool>> method);
+        ResponseDto<ICollection<CertificateDto>> GetWhere(Expression<Func<Certificate, bool>> method);
+        Task<ResponseDtoWithoutData> Remove(long id);
+        ResponseDtoWithoutData Remove(CertificateDto model);
+        ResponseDtoWithoutData RemoveRange(List<CertificateDto> datas);
         Task<int> SaveAsync();
-        void Update(CertificateDto model);
+        Task<ResponseDtoWithoutData> Update(CertificateDto model);
     }
 }

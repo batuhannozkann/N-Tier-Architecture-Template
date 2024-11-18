@@ -1,5 +1,6 @@
 ﻿using CV.Core.DTOs.Person;
 using CV.Core.Entities;
+using CV.Shared.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,16 +12,17 @@ namespace CV.Business.Services.Abstract
 {
     public interface IPersonService
     {
-        ICollection<PersonDto> GetAll();
-        Task<PersonDto> GetByIdAsync(long id);
-        Task<PersonDto> GetSingleAsync(Expression<Func<Person, bool>> method);
-        ICollection<PersonDto> GetWhere(Expression<Func<Person, bool>> method);
-        Task<PersonDto> AddAsync(CreatePersonDto model);
-        Task<List<PersonDto>> AddRangeAsync(List<CreatePersonDto> model);
-        Task Remove(long id);
-        void Remove(PersonDto model);
-        void RemoveRange(List<PersonDto> datas);
-        void Update(PersonDto model);
+        ResponseDto<ICollection<PersonDto>> GetAll();
+        Task<ResponseDto<PersonDto>> GetByIdAsync(long id);
+        Task<ResponseDto<PersonDto>> GetSingleAsync(Expression<Func<Person, bool>> method);
+        ResponseDto<ICollection<PersonDto>> GetWhere(Expression<Func<Person, bool>> method);
+        Task<ResponseDto<PersonDto>> AddAsync(CreatePersonDto model);
+        Task<ResponseDto<List<PersonDto>>> AddRangeAsync(List<CreatePersonDto> model);
+        Task<ResponseDtoWithoutData> Remove(long id);
+        ResponseDtoWithoutData Remove(PersonDto model);
+        ResponseDtoWithoutData RemoveRange(List<PersonDto> datas);
+        Task<ResponseDtoWithoutData> Update(PersonDto model);
         Task<int> SaveAsync();
     }
+
 }

@@ -1,5 +1,6 @@
 ﻿using CV.Core.DTOs.Attachment;
 using CV.Core.Entities;
+using CV.Shared.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,16 +12,20 @@ namespace CV.Business.Services.Abstract
 {
     public interface IAttachmentService
     {
-        Task<AttachmentDto> AddAsync(CreateAttachmentDto model);
-        Task<List<AttachmentDto>> AddRangeAsync(List<CreateAttachmentDto> model);
-        ICollection<AttachmentDto> GetAll();
-        Task<AttachmentDto> GetByIdAsync(long id);
-        Task<AttachmentDto> GetSingleAsync(Expression<Func<Attachment, bool>> method);
-        ICollection<AttachmentDto> GetWhere(Expression<Func<Attachment, bool>> method);
-        Task Remove(long id);
-        void Remove(AttachmentDto model);
-        void RemoveRange(List<AttachmentDto> datas);
-        Task<int> SaveAsync();
-        void Update(AttachmentDto model);
+        public interface IAttachmentService
+        {
+            Task<ResponseDto<AttachmentDto>> AddAsync(CreateAttachmentDto model);
+            Task<ResponseDto<List<AttachmentDto>>> AddRangeAsync(List<CreateAttachmentDto> model);
+            ResponseDto<ICollection<AttachmentDto>> GetAll();
+            Task<ResponseDto<AttachmentDto>> GetByIdAsync(long id);
+            Task<ResponseDto<AttachmentDto>> GetSingleAsync(Expression<Func<Attachment, bool>> method);
+            ResponseDto<ICollection<AttachmentDto>> GetWhere(Expression<Func<Attachment, bool>> method);
+            Task<ResponseDtoWithoutData> Remove(long id);
+            ResponseDtoWithoutData Remove(AttachmentDto model);
+            ResponseDtoWithoutData RemoveRange(List<AttachmentDto> datas);
+            Task<int> SaveAsync();
+            Task<ResponseDtoWithoutData> Update(AttachmentDto model);
+        }
+
     }
 }

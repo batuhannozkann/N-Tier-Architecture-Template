@@ -9,8 +9,8 @@ namespace CV.Core.Entities
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public List<string> TechnologiesUsed { get; set; }
-        public ICollection<string> GitHubUrls { get; set; }
-        public string ProjectURL { get; set; }
+        public ICollection<string>? GitHubUrls { get; set; }
+        public string? ProjectURL { get; set; }
         public Person Person { get; set; }
         public int PersonId { get; set; }
     }

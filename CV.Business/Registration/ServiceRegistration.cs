@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using CV.Business.MapProfile;
+using CV.Business.Services.Abstract;
+using CV.Business.Services.Concrete;
 using CV.DataAccess.Contexts;
 using CV.DataAccess.Repositories.Abstract;
 using CV.DataAccess.Repositories.Concrete;
@@ -22,6 +24,23 @@ namespace CV.Business.Registration
             });
             services.AddAutoMapper(typeof(MapProfile.MapProfile).Assembly);
             services.AddScoped<IPersonRepository, PersonRepository>();
+            services.AddScoped<IAddressRepository, AddressRepository>();
+            services.AddScoped<IAttachmentRepository, AttachmentRepository>();
+            services.AddScoped<ICertificateRepository, CertificateRepository>();
+            services.AddScoped<IReferenceRepository, ReferenceRepository>();
+            services.AddScoped<ISkillRepository, SkillRepository>();
+            services.AddScoped<ISocialMediaRepository, SocialMediaRepository>();
+            services.AddScoped<IEducationRepository, EducationRepository>();
+            services.AddScoped<IProjectRepository, ProjectRepository>();
+            services.AddScoped<IPersonService, PersonService>();
+            services.AddScoped<IAddressService, AddressService>();
+            services.AddScoped<IAttachmentService, AttachmentService>();
+            services.AddScoped<ICertificateService, CertificateService>();
+            services.AddScoped<IReferenceService, ReferenceService>();
+            services.AddScoped<ISkillService, SkillService>();
+            services.AddScoped<ISocialMediaService, SocialMediaService>();
+            services.AddScoped<IEducationService, EducationService>();
+            services.AddScoped<IProjectService, ProjectService>();
             return services;
         }
 
