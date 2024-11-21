@@ -1,5 +1,6 @@
 ﻿using CV.Core.DTOs.Project;
 using CV.Core.Entities;
+using CV.Shared.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,16 +12,17 @@ namespace CV.Business.Services.Abstract
 {
     public interface IProjectService
     {
-        Task<ProjectDto> AddAsync(CreateProjectDto model);
-        Task<List<ProjectDto>> AddRangeAsync(List<CreateProjectDto> model);
-        ICollection<ProjectDto> GetAll();
-        Task<ProjectDto> GetByIdAsync(long id);
-        Task<ProjectDto> GetSingleAsync(Expression<Func<Project, bool>> method);
-        ICollection<ProjectDto> GetWhere(Expression<Func<Project, bool>> method);
-        Task Remove(long id);
-        void Remove(ProjectDto model);
-        void RemoveRange(List<ProjectDto> datas);
+        Task<ResponseDto<ProjectDto>> AddAsync(CreateProjectDto model);
+        Task<ResponseDto<List<ProjectDto>>> AddRangeAsync(List<CreateProjectDto> model);
+        ResponseDto<ICollection<ProjectDto>> GetAll();
+        Task<ResponseDto<ProjectDto>> GetByIdAsync(long id);
+        Task<ResponseDto<ProjectDto>> GetSingleAsync(Expression<Func<Project, bool>> method);
+        ResponseDto<ICollection<ProjectDto>> GetWhere(Expression<Func<Project, bool>> method);
+        Task<ResponseDtoWithoutData> Remove(long id);
+        ResponseDtoWithoutData Remove(ProjectDto model);
+        ResponseDtoWithoutData RemoveRange(List<ProjectDto> datas);
         Task<int> SaveAsync();
-        void Update(ProjectDto model);
+        Task<ResponseDtoWithoutData> Update(ProjectDto model);
     }
+
 }

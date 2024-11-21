@@ -4,6 +4,7 @@ using CV.DataAccess.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CV.DataAccess.Migrations
 {
     [DbContext(typeof(CvApplicationContext))]
-    partial class CvApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20241118054716_migUpdate1")]
+    partial class migUpdate1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -64,7 +67,7 @@ namespace CV.DataAccess.Migrations
 
                     b.HasIndex("PersonId");
 
-                    b.ToTable("Addresses");
+                    b.ToTable("Address");
                 });
 
             modelBuilder.Entity("CV.Core.Entities.Attachment", b =>
@@ -308,7 +311,7 @@ namespace CV.DataAccess.Migrations
 
                     b.HasIndex("PersonId");
 
-                    b.ToTable("Projects");
+                    b.ToTable("Project");
                 });
 
             modelBuilder.Entity("CV.Core.Entities.Reference", b =>

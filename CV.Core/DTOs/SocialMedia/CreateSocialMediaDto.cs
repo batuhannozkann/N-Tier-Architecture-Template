@@ -11,5 +11,6 @@ namespace CV.Core.DTOs.SocialMedia
         public string Platform { get; set; }
         public string Username { get; set; }
         public string ProfileURL { get; set; }
+        public int PersonId { get; set; }
     }
 }

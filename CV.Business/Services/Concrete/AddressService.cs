@@ -3,10 +3,12 @@ using CV.Business.Services.Abstract;
 using CV.Core.DTOs.Address;
 using CV.Core.Entities;
 using CV.DataAccess.Repositories.Abstract;
+using CV.Shared.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,71 +27,149 @@ namespace CV.Business.Services.Concrete
             _mapper = mapper;
         }
 
-        public async Task<AddressDto> AddAsync(CreateAddressDto model)
+        public async Task<ResponseDto<AddressDto>> AddAsync(CreateAddressDto model)
         {
             Address address = _mapper.Map<Address>(model);
             address.Person = await _personRepository.GetByIdAsync(model.PersonId);
             var result = await _addressRepository.AddAsync(address);
-            return _mapper.Map<AddressDto>(result);
+            return new ResponseDto<AddressDto>
+            {
+                Data = _mapper.Map<AddressDto>(result),
+                StatusCode = (int)HttpStatusCode.Created,
+                Message = "Address successfully created",
+                IsSuccess = true
+            };
         }
 
-        public async Task<List<AddressDto>> AddRangeAsync(List<CreateAddressDto> model)
+        public async Task<ResponseDto<List<AddressDto>>> AddRangeAsync(List<CreateAddressDto> model)
         {
             List<Address> addresses = _mapper.Map<List<Address>>(model);
+            for (int i = 0; i < model.Count; i++)
+            {
+                addresses[i].Person = await _personRepository.GetByIdAsync(model[i].PersonId);
+            }
             var result = await _addressRepository.AddRangeAsync(addresses);
-            return _mapper.Map<List<AddressDto>>(result);
+            return new ResponseDto<List<AddressDto>>
+            {
+                Data = _mapper.Map<List<AddressDto>>(result),
+                StatusCode = (int)HttpStatusCode.Created,
+                Message = "Addresses successfully created",
+                IsSuccess = true
+            };
         }
 
-        public ICollection<AddressDto> GetAll()
+        public ResponseDto<ICollection<AddressDto>> GetAll()
         {
-            List<AddressDto> addresses = _mapper.Map<List<AddressDto>>(_addressRepository.GetAll().ToList());
-            return addresses;
+            var addresses = _mapper.Map<List<AddressDto>>(_addressRepository.GetAll().ToList());
+            return new ResponseDto<ICollection<AddressDto>>
+            {
+                Data = addresses,
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Addresses successfully retrieved",
+                IsSuccess = true
+            };
         }
 
-        public async Task<AddressDto> GetByIdAsync(long id)
+        public async Task<ResponseDto<AddressDto>> GetByIdAsync(long id)
         {
-            Address address = await _addressRepository.GetByIdAsync(id);
-            AddressDto addressDto = _mapper.Map<AddressDto>(address);
-            return addressDto;
+            var address = await _addressRepository.GetByIdAsync(id);
+            if (address == null)
+                return new ResponseDto<AddressDto>
+                {
+                    StatusCode = (int)HttpStatusCode.NotFound,
+                    Message = "Address not found",
+                    IsSuccess = false
+                };
+
+            return new ResponseDto<AddressDto>
+            {
+                Data = _mapper.Map<AddressDto>(address),
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Address successfully retrieved",
+                IsSuccess = true
+            };
         }
 
-        public async Task<AddressDto> GetSingleAsync(Expression<Func<Address, bool>> method)
+        public async Task<ResponseDto<AddressDto>> GetSingleAsync(Expression<Func<Address, bool>> method)
         {
-            Address address = await _addressRepository.GetSingleAsync(method);
-            AddressDto addressDto = _mapper.Map<AddressDto>(address);
-            return addressDto;
+            var address = await _addressRepository.GetSingleAsync(method);
+            if (address == null)
+                return new ResponseDto<AddressDto>
+                {
+                    StatusCode = (int)HttpStatusCode.NotFound,
+                    Message = "Address not found",
+                    IsSuccess = false
+                };
+
+            return new ResponseDto<AddressDto>
+            {
+                Data = _mapper.Map<AddressDto>(address),
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Address successfully retrieved",
+                IsSuccess = true
+            };
         }
 
-        public ICollection<AddressDto> GetWhere(Expression<Func<Address, bool>> method)
+        public ResponseDto<ICollection<AddressDto>> GetWhere(Expression<Func<Address, bool>> method)
         {
-            List<Address> addresses = _addressRepository.GetWhere(method).ToList();
-            List<AddressDto> addressDtos = _mapper.Map<List<AddressDto>>(addresses);
-            return addressDtos;
+            var addresses = _addressRepository.GetWhere(method).ToList();
+            return new ResponseDto<ICollection<AddressDto>>
+            {
+                Data = _mapper.Map<List<AddressDto>>(addresses),
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Addresses successfully retrieved",
+                IsSuccess = true
+            };
         }
 
-        public async Task Remove(long id)
+        public async Task<ResponseDtoWithoutData> Remove(long id)
         {
             await _addressRepository.Remove(id);
+            return new ResponseDtoWithoutData
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Address successfully deleted",
+                IsSuccess = true
+            };
         }
 
-        public void Remove(AddressDto model)
+        public ResponseDtoWithoutData Remove(AddressDto model)
         {
             _addressRepository.Remove(_mapper.Map<Address>(model));
+            return new ResponseDtoWithoutData
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Address successfully deleted",
+                IsSuccess = true
+            };
         }
 
-        public void RemoveRange(List<AddressDto> datas)
+        public ResponseDtoWithoutData RemoveRange(List<AddressDto> datas)
         {
             _addressRepository.RemoveRange(_mapper.Map<List<Address>>(datas));
+            return new ResponseDtoWithoutData
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Addresses successfully deleted",
+                IsSuccess = true
+            };
         }
 
-        public Task<int> SaveAsync()
+        public async Task<int> SaveAsync()
         {
-            throw new NotImplementedException();
+            return await _addressRepository.SaveAsync();
         }
 
-        public void Update(AddressDto model)
+        public async Task<ResponseDtoWithoutData> Update(AddressDto model)
         {
             _addressRepository.Update(_mapper.Map<Address>(model));
+            return new ResponseDtoWithoutData
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Address successfully updated",
+                IsSuccess = true
+            };
         }
     }
+
 }

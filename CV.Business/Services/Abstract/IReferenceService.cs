@@ -1,5 +1,6 @@
 ﻿using CV.Core.DTOs.Reference;
 using CV.Core.Entities;
+using CV.Shared.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,16 +12,16 @@ namespace CV.Business.Services.Abstract
 {
     public interface IReferenceService
     {
-        Task<ReferenceDto> AddAsync(CreateReferenceDto model);
-        Task<List<ReferenceDto>> AddRangeAsync(List<CreateReferenceDto> model);
-        ICollection<ReferenceDto> GetAll();
-        Task<ReferenceDto> GetByIdAsync(long id);
-        Task<ReferenceDto> GetSingleAsync(Expression<Func<Reference, bool>> method);
-        ICollection<ReferenceDto> GetWhere(Expression<Func<Reference, bool>> method);
-        Task Remove(long id);
-        void Remove(ReferenceDto model);
-        void RemoveRange(List<ReferenceDto> datas);
+        Task<ResponseDto<ReferenceDto>> AddAsync(CreateReferenceDto model);
+        Task<ResponseDto<List<ReferenceDto>>> AddRangeAsync(List<CreateReferenceDto> model);
+        ResponseDto<ICollection<ReferenceDto>> GetAll();
+        Task<ResponseDto<ReferenceDto>> GetByIdAsync(long id);
+        Task<ResponseDto<ReferenceDto>> GetSingleAsync(Expression<Func<Reference, bool>> method);
+        ResponseDto<ICollection<ReferenceDto>> GetWhere(Expression<Func<Reference, bool>> method);
+        Task<ResponseDtoWithoutData> Remove(long id);
+        ResponseDtoWithoutData Remove(ReferenceDto model);
+        ResponseDtoWithoutData RemoveRange(List<ReferenceDto> datas);
         Task<int> SaveAsync();
-        void Update(ReferenceDto model);
+        Task<ResponseDtoWithoutData> Update(ReferenceDto model);
     }
 }

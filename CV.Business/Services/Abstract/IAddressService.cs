@@ -1,5 +1,6 @@
 ﻿using CV.Core.DTOs.Address;
 using CV.Core.Entities;
+using CV.Shared.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,16 +12,16 @@ namespace CV.Business.Services.Abstract
 {
     public interface IAddressService
     {
-        Task<AddressDto> AddAsync(CreateAddressDto model);
-        Task<List<AddressDto>> AddRangeAsync(List<CreateAddressDto> model);
-        ICollection<AddressDto> GetAll();
-        Task<AddressDto> GetByIdAsync(long id);
-        Task<AddressDto> GetSingleAsync(Expression<Func<Address, bool>> method);
-        ICollection<AddressDto> GetWhere(Expression<Func<Address, bool>> method);
-        Task Remove(long id);
-        void Remove(AddressDto model);
-        void RemoveRange(List<AddressDto> datas);
+        Task<ResponseDto<AddressDto>> AddAsync(CreateAddressDto model);
+        Task<ResponseDto<List<AddressDto>>> AddRangeAsync(List<CreateAddressDto> model);
+        ResponseDto<ICollection<AddressDto>> GetAll();
+        Task<ResponseDto<AddressDto>> GetByIdAsync(long id);
+        Task<ResponseDto<AddressDto>> GetSingleAsync(Expression<Func<Address, bool>> method);
+        ResponseDto<ICollection<AddressDto>> GetWhere(Expression<Func<Address, bool>> method);
+        Task<ResponseDtoWithoutData> Remove(long id);
+        ResponseDtoWithoutData Remove(AddressDto model);
+        ResponseDtoWithoutData RemoveRange(List<AddressDto> datas);
         Task<int> SaveAsync();
-        void Update(AddressDto model);
+        Task<ResponseDtoWithoutData> Update(AddressDto model);
     }
 }

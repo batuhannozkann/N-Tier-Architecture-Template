@@ -1,5 +1,6 @@
 ﻿using CV.Core.DTOs.Skill;
 using CV.Core.Entities;
+using CV.Shared.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,17 +12,18 @@ namespace CV.Business.Services.Abstract
 {
     public interface ISkillService
     {
-        Task<SkillDto> AddAsync(CreateSkillDto model);
-        Task<List<SkillDto>> AddRangeAsync(List<CreateSkillDto> model);
-        ICollection<SkillDto> GetAll();
-        Task<SkillDto> GetByIdAsync(long id);
-        Task<SkillDto> GetSingleAsync(Expression<Func<Skill, bool>> method);
-        ICollection<SkillDto> GetWhere(Expression<Func<Skill, bool>> method);
-        Task Remove(long id);
-        void Remove(SkillDto model);
-        void RemoveRange(List<SkillDto> datas);
+        Task<ResponseDto<SkillDto>> AddAsync(CreateSkillDto model);
+        Task<ResponseDto<List<SkillDto>>> AddRangeAsync(List<CreateSkillDto> model);
+        ResponseDto<ICollection<SkillDto>> GetAll();
+        Task<ResponseDto<SkillDto>> GetByIdAsync(long id);
+        Task<ResponseDto<SkillDto>> GetSingleAsync(Expression<Func<Skill, bool>> method);
+        ResponseDto<ICollection<SkillDto>> GetWhere(Expression<Func<Skill, bool>> method);
+        Task<ResponseDtoWithoutData> Remove(long id);
+        ResponseDtoWithoutData Remove(SkillDto model);
+        ResponseDtoWithoutData RemoveRange(List<SkillDto> datas);
         Task<int> SaveAsync();
-        void Update(SkillDto model);
+        Task<ResponseDtoWithoutData> Update(SkillDto model);
     }
+
 
 }

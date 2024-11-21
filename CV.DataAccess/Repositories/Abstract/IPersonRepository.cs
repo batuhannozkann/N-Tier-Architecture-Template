@@ -5,6 +5,7 @@ namespace CV.DataAccess.Repositories.Abstract
 {
     public interface IPersonRepository : IBaseRepository<Person>
     {
+        Task<Person> AddPersonWithRelatedEntitiesAsync(Person person);
     }
 
 }
