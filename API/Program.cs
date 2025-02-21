@@ -1,4 +1,5 @@
 
+using API.Middleware;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -26,6 +27,7 @@ namespace API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             app.UseHttpsRedirection();
 
